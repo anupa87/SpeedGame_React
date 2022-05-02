@@ -69,7 +69,14 @@ button {
   justify-content: center;
   border: none;
 }
-
+.difficulty-btn {
+  padding-top: 3rem;
+}
+.difficulty-header {
+  font-size: 2.5rem;
+  padding-top: 2rem;
+  text-shadow: 3px 3px 5px black;
+}
 .overlay {
   height: 50%;
   width: 50%;

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-// import "./index.css";
 
 import Button from "./components/Button";
 import Circle from "./components/Circle";
 import Modal from "./components/Modal";
 import { circles } from "./circles";
+import GameSetUp from "./components/GameSetup";
 
 import startMusic from "./assets/sounds/start.wav";
 import stopMusic from "./assets/sounds/end.wav";
@@ -22,10 +22,14 @@ class App extends Component {
   state = {
     score: 0,
     current: -1,
-    showModal: false,
     pace: 1500,
     rounds: 0,
+    showModal: false,
+    showGameSetup: true,
     gameOn: false,
+    difficulty: "",
+    circles: [],
+    maxRounds: 3,
   };
 
   timer = undefined;
@@ -38,12 +42,36 @@ class App extends Component {
     }
   };
 
+  gameSetupHandler = (level) => {
+    let circleArray;
+    switch (level) {
+      case "easy":
+        circleArray = Array.from({ length: 3 }, (x, i) => i);
+        break;
+      case "medium":
+        circleArray = Array.from({ length: 5 }, (x, i) => i);
+        break;
+      case "difficult":
+        circleArray = Array.from({ length: 7 }, (x, i) => i);
+        break;
+      default:
+        circleArray = Array.from({ length: 3 }, (x, i) => i);
+    }
+    this.setState({
+      circles: circleArray,
+      showGameSetup: false,
+      gameOn: false,
+      difficulty: level,
+    });
+  };
+
   clickHandler = (i) => {
     this.clickPlay();
     if (this.state.current !== i) {
       this.stopHandler();
       return;
     }
+    // console.log("clickHandler, circle number:",i);
     this.setState({
       score: this.state.score + 10,
       rounds: this.state.rounds - 1,
@@ -51,15 +79,14 @@ class App extends Component {
   };
 
   nextCircle = () => {
-    if (this.state.rounds >= 1) {
+    if (this.state.rounds >= 3) {
       this.stopHandler();
       return;
     }
 
     let nextActive;
-
     do {
-      nextActive = getRndInteger(0, 3);
+      nextActive = getRndInteger(0, this.state.circles.length);
     } while (nextActive === this.state.current);
 
     this.setState({
@@ -76,7 +103,7 @@ class App extends Component {
     startSound.play();
     startSound.loop = true;
     this.nextCircle();
-    this.setState({ gameOn: true });
+    this.setState({ gameOn: true, showGameSetup: false, rounds: 0 });
   };
 
   stopHandler = () => {
@@ -87,50 +114,58 @@ class App extends Component {
   };
 
   closeHandler = () => {
-    window.location.reload();
+    this.setState({
+      showModal: false,
+      score: 0,
+      current: -1,
+      showGameSetup: true,
+      rounds: 0,
+    });
   };
 
   render() {
-    let message = "";
-
-    if (this.state.score <= 50) {
-      message = "You can do better";
-    } else if (this.state.score >= 51 && this.state.score <= 100) {
-      message = "Now you are getting the hang of it";
-    } else {
-      message = "You are rocking it, Well done !";
-    }
-
     return (
       <div className="container">
         <div>
           <h1>Hit the Target</h1>
         </div>
-        <div className="score">
-          <p>Your score: {this.state.score}</p>
-        </div>
-        <div className="circles">
-          {circles.map((_, i) => (
-            <Circle
-              key={i}
-              id={i}
-              click={() => this.clickHandler(i)}
-              active={this.state.current === i}
-              disabled={this.state.gameOn}
-            />
-          ))}
-        </div>
+        {this.state.showGameSetup && (
+          <GameSetUp>
+            <Button click={() => this.gameSetupHandler("easy")}>Easy</Button>
+            <Button click={() => this.gameSetupHandler("medium")}>
+              Medium
+            </Button>
+            <Button click={() => this.gameSetupHandler("difficult")}>
+              Difficult
+            </Button>
+          </GameSetUp>
+        )}
         <div>
-          {!this.state.gameOn && (
+          {this.state.gameOn && (
+            <p className="score">Your score: {this.state.score}</p>
+          )}
+          <div className="circles">
+            {this.state.circles.map((_, i) => (
+              <Circle
+                key={i}
+                id={i}
+                click={() => this.clickHandler(i)}
+                active={this.state.current === i}
+                disabled={this.state.gameOn}
+              />
+            ))}
+          </div>
+          {this.state.gameOn && (
             <Button click={this.startHandler}>START</Button>
           )}
           {this.state.gameOn && <Button click={this.stopHandler}>STOP</Button>}
         </div>
+
         {this.state.showModal && (
           <Modal
             click={this.closeHandler}
             score={this.state.score}
-            message={message}
+            message={this.state.message}
           />
         )}
       </div>
