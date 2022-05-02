@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@800&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Big Shoulders Stencil Display", cursive;
+  color: orange;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  padding: 2rem 5rem;
+  background-image: url(https://images.unsplash.com/photo-1487147264018-f937fba0c817?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8ODR8fHdvb2QlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+h1 {
+  margin: 2rem auto;
+  font-size: 6rem;
+  text-shadow: 2px 2px 4px black;
+}
+
+.score {
+  font-size: 2rem;
+}
+
+.circles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.circle {
+  width: 150px;
+  height: 150px;
+  background-color: silver;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 4px black;
+}
+
+.circle.active {
+  background-image: url("assets/dartboard.svg");
+  box-shadow: 0 0 25px rgb(0, 0, 0);
+  background-size: cover;
+}
+
+button {
+  height: 50px;
+  width: 100px;
+  border-radius: 50%;
+  margin: 1.5rem;
+  background-color: orange;
+  cursor: pointer;
+  box-shadow: 0 4px black;
+  font-family: "Special Elite", cursive;
+  font-size: 1rem;
+  justify-content: center;
+  border: none;
+}
+
+.overlay {
+  height: 50%;
+  width: 50%;
+  position: fixed;
+  top: 13rem;
+  left: 24rem;
+  z-index: 100;
+  background-color: white;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.overlay button {
+  height: 30px;
+  width: 50px;
+  background: lightgrey;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.overlay-text {
+  line-height: 3rem;
+}
