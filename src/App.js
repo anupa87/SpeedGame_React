@@ -30,6 +30,7 @@ class App extends Component {
     difficulty: "",
     circles: [],
     maxRounds: 3,
+    isDisplay: true,
   };
 
   timer = undefined;
@@ -60,7 +61,7 @@ class App extends Component {
     this.setState({
       circles: circleArray,
       showGameSetup: false,
-      gameOn: false,
+      gameOn: true,
       difficulty: level,
     });
   };
@@ -103,7 +104,12 @@ class App extends Component {
     startSound.play();
     startSound.loop = true;
     this.nextCircle();
-    this.setState({ gameOn: true, showGameSetup: false, rounds: 0 });
+    this.setState({
+      gameOn: true,
+      showGameSetup: false,
+      rounds: 0,
+      isDisplay: false,
+    });
   };
 
   stopHandler = () => {
@@ -120,6 +126,7 @@ class App extends Component {
       current: -1,
       showGameSetup: true,
       rounds: 0,
+      isDisplay: true,
     });
   };
 
@@ -155,10 +162,12 @@ class App extends Component {
               />
             ))}
           </div>
-          {this.state.gameOn && (
+          {this.state.isDisplay && (
             <Button click={this.startHandler}>START</Button>
           )}
-          {this.state.gameOn && <Button click={this.stopHandler}>STOP</Button>}
+          {!this.state.isDisplay && (
+            <Button click={this.stopHandler}>STOP</Button>
+          )}
         </div>
 
         {this.state.showModal && (
