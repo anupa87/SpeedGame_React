@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import Button from "./components/Button";
 import Circle from "./components/Circle";
 import Modal from "./components/Modal";
-import { circles } from "./circles";
 import GameSetUp from "./components/GameSetup";
 
 import startMusic from "./assets/sounds/start.wav";
@@ -30,7 +29,7 @@ class App extends Component {
     difficulty: "",
     circles: [],
     maxRounds: 3,
-    isDisplay: true,
+    startDisplay: false,
   };
 
   timer = undefined;
@@ -62,6 +61,7 @@ class App extends Component {
       circles: circleArray,
       showGameSetup: false,
       gameOn: true,
+      startDisplay: true,
       difficulty: level,
     });
   };
@@ -108,7 +108,8 @@ class App extends Component {
       gameOn: true,
       showGameSetup: false,
       rounds: 0,
-      isDisplay: false,
+      startDisplay: false,
+      stopDisplay: true,
     });
   };
 
@@ -116,17 +117,18 @@ class App extends Component {
     startSound.pause();
     stopSound.play();
     clearTimeout(this.timer);
-    this.setState({ showModal: true, gameOn: false });
+    this.setState({ showModal: true, gameOn: false, stopDisplay: true });
   };
 
   closeHandler = () => {
+    window.location.reload();
     this.setState({
       showModal: false,
       score: 0,
       current: -1,
       showGameSetup: true,
+      gameOn: false,
       rounds: 0,
-      isDisplay: true,
     });
   };
 
@@ -162,14 +164,13 @@ class App extends Component {
               />
             ))}
           </div>
-          {this.state.isDisplay && (
+          {this.state.startDisplay && (
             <Button click={this.startHandler}>START</Button>
           )}
-          {!this.state.isDisplay && (
+          {this.state.stopDisplay && (
             <Button click={this.stopHandler}>STOP</Button>
           )}
         </div>
-
         {this.state.showModal && (
           <Modal
             click={this.closeHandler}
@@ -181,5 +182,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;
